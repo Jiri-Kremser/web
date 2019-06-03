@@ -32,11 +32,11 @@
 # #   name = "phone"
 # #   url = "sdfsf"
 
-baseURL = "http://example.com/"
+baseURL = "https://Jiri-Kremser.github.io"
 languageCode = "en-us"
 title = "Jirka Kremser"
 theme = "minimal"
-disqusShortname = "username" # delete this to disable disqus comments
+# disqusShortname = "username" # delete this to disable disqus comments
 googleAnalytics = ""
 
 [params]
