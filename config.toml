@@ -32,7 +32,7 @@
 # #   name = "phone"
 # #   url = "sdfsf"
 
-baseURL = "https://Jiri-Kremser.github.io"
+baseURL = "https://jkremser.github.io"
 languageCode = "en-us"
 title = "Jirka Kremser"
 theme = "minimal"
