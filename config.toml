@@ -1,0 +1,10 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "My New Hugo Site"
+theme = "m10c"
+author = "Jirka Kremser"
+description = "Opensource enthusiast"
+
+[[params.social]]
+  name = "github"
+  url = "https://github.com/Jiri-Kremser"
