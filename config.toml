@@ -37,16 +37,17 @@ languageCode = "en-us"
 title = "Jirka Kremser"
 theme = "minimal"
 # disqusShortname = "username" # delete this to disable disqus comments
-googleAnalytics = ""
+googleAnalytics = "UA-141311316-1"
 
 [params]
     author = "Jirka Kremser"
     description = "Full-stack software engineer working at Red Hat and open source enthusiast."
-    githubUsername = "Jiri-Kremser"
+    githubUsername = "jkremser"
     accent = "#1a574a"
     showBorder = true
     backgroundColor = "#dfe2e5"
     profilePic = "avatar.png"
+    copyright = "🄯 Copyleft: All rights not-reserved, here is the <a href='https://github.com/jkremser/web'>code</a>"
     # should match the name on Google Fonts!
     # font = "Raleway"
     font = "Montserrat"
@@ -93,7 +94,7 @@ googleAnalytics = ""
 
 
 [[menu.icon]]
-    url = "https://github.com/Jiri-Kremser/"
+    url = "https://github.com/jkremser/"
     name = "github"
     weight = 1
 
