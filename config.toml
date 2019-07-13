@@ -36,7 +36,7 @@ baseURL = "https://jkremser.github.io/"
 languageCode = "en-us"
 title = "Jirka Kremser"
 theme = "minimal"
-# disqusShortname = "username" # delete this to disable disqus comments
+disqusShortname = "jkremser"
 googleAnalytics = "UA-141311316-1"
 
 [params]
@@ -63,7 +63,7 @@ googleAnalytics = "UA-141311316-1"
     # font = "Oxygen"
     highlight = true
     highlightStyle = "solarized-dark"
-    highlightLanguages = ["go", "haskell", "kotlin", "scala", "swift"]
+    highlightLanguages = ["go", "java", "kotlin", "scala", "bash"]
 
 [[menu.main]]
     url = "/"
