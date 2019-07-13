@@ -21,6 +21,9 @@ GraalVM provides, among other polyglot features, also the ahead of time compilat
 
 As for the reflective calls, one has to tell GraalVM compiler in advance what classes and methods will be used for reflection and whitelist them using a JSON file that is then passed to the native image tool. Here, I see the big advantage of a quarkus.io that helps with the native image build. It can automatically figures out what classes should be marked that require the reflection or you can use the annotation to explicitly mention them if quarkus misses them.
 
+{{% notice note %}}
+UPDATE: The automatic detection of reflective calls is actually added to GraalVM's native image itself ([docs](https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md#automatic-detection)). However, it doesn't work in all possible situations.
+{{% /notice %}}
 
 Another nice feature of quarkus is that it provides some `Java EE` specs that wouldn't work otherwise with the native image, for instance the `CDI` implementation or `JAX-RS` for rest services. Last but not least, it provides a set of maven plugins and tools for rapid development of web apps.
 
@@ -74,7 +77,7 @@ if (operatorList.isEmpty()) {
 ```
 So one little drawback here is that the concrete implementation of the operator now has to be an injectable entity, so `@Singleton` is a good candidate for that class. This unfortunately breaks the backward compatibility with the previous implementation.
 
-The [Abstract Operator Java SDK](https://github.com/jvm-operators/abstract-operator) uses the JSON schema as the single source of truth for the shape of all the Custom Resources (`CR`) that operator manages and also automatically register itself as the OpenApiV3 schema so that Kubernetes may check the actual schema validation. In other words, the framework itself registers the Custom Resource Definition (`CRD`) based on these JSON schemas + makes sure the schema validation will work with K8s.
+The [Abstract Operator Java SDK](https://github.com/jvm-operators/abstract-operator) uses the JSON schema as the single source of truth for the shape of all the Custom Resources (`CR`) that operator manages and also automatically register itself as the [OpenAPIv3 schema](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#specifying-a-structural-schema) so that Kubernetes may check the actual schema validation. In other words, the framework itself registers the Custom Resource Definition (`CRD`) based on these JSON schemas + makes sure the schema validation will work with K8s.
 
 What it also does is generating Java POJOs from these JSON schemas, so that user of the SDK may extract the right information from the custom resource in the code and react correctly on it. However, these generated classes weren't automatically detected by quarkus.io for the reflective calls, so the operator failed in run time when deserializing the CRs. Luckily, the `jsonschema2pojo` library can change the behavir of the class generation by providing its own "Annotator" Using that fact, I've created a annotator that puts the `@RegisterForReflection` on each generated class and quarkus can find the classes and register them without any issues.
 
