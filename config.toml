@@ -41,7 +41,7 @@ googleAnalytics = "UA-141311316-1"
 
 [params]
     author = "Jirka Kremser"
-    description = "Full-stack software engineer working at Red Hat and open source enthusiast."
+    description = "Full-stack software engineer working at ~~Red Hat~~ Oracle and open source enthusiast."
     githubUsername = "jkremser"
     accent = "#1a574a"
     showBorder = true
@@ -114,6 +114,6 @@ googleAnalytics = "UA-141311316-1"
     weight = 4
 
 [[menu.icon]]
-    url = "mailto:jkremser@redhat.com"
+    url = "mailto:jiri.kremser@gmail.com"
     name = "envelope-o"
     weight = 5
