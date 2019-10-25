@@ -2,6 +2,8 @@
 title: "Migrating the Spark Operator to Quarkus"
 date: 2019-07-13
 tags: ["spark", "spark-operator", "quarkus", "graalvm"]
+disqus_identifier: "spark-operator-quarkus"
+disqus_title: "Migrating the Spark Operator to Quarkus"
 draft: false
 ---
 
