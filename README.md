@@ -6,6 +6,7 @@ https://jkremser.github.io
 ```
 # after cloning the repo
 git submodule add -f -b master git@github.com:jkremser/jkremser.github.io.git public
+git submodule update --init --recursive
 ```
 
 ```bash
