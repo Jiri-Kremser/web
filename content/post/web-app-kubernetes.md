@@ -1,17 +1,17 @@
 ---
 title: "Prototyping a web app that can talk to Kubernetes API"
-date: 2020-05-25
+date: 2020-06-29
 tags: ["kubernetes", "development", "frontend", "API", "JavaScript", "express.js"]
 disqus_identifier: "web-app-k8s"
 disqus_title: "Prototyping a web app that can talk to Kubernetes API"
-draft: true
+draft: false
 ---
 
 # Motivation
 
-With the advent of various types of [operators](https://coreos.com/operators/) on top of Kubernetes platform, it might be useful to provide users with a fancy dashboard. However, dashboards these days are often written in JavaScript and libraries/frameworks like React.js, Vue.js or Angular. Kubernetes API on the other hand is a bunch of REST endpoints. So it all may look pretty simple, just call those endpoints from the app written in JavaScript, right? Unfortunatelly, it's not that simple, because of the AuthN and AuthZ that is by default turned on in the Kubernetes REST endpoints and giving the bearer token to the client-side JavaScript app might be a security risk.
+With the advent of various types of [operators](https://coreos.com/operators/) on top of Kubernetes platform, it might be useful to provide users with a fancy dashboard. However, dashboards these days are often written in JavaScript and libraries/frameworks like React.js, Vue.js or Angular. Kubernetes API on the other hand is a bunch of REST endpoints. So it all may look pretty simple, just call those endpoints from the app written in JavaScript, right? Unfortunatelly, it's not that simple, because of the AuthN and AuthZ that is by default turned on in the Kubernetes REST endpoints and giving the bearer token to the client-side JavaScript app (in browser) might be a security risk.
 
-Let's dive into the problem and let's code some very simple web application in the following two blog posts.
+Let's dive into the problem and let's code some very simple web application in the following couple of blog posts.
 
 ## Design
 Here is the idea. We know that client-side JavaScript app will by definition run on the client side, but at the same time we need to be able to access the K8s api using the token. 
@@ -19,7 +19,7 @@ So let's split the webapp into two pieces:
  - server-side: the rest endpoints with only those APIs that we will be calling from the client-side
  - client-side: application in React.js
 
-In other words the server-side rest endpoints will be transforming the incoming request to the request for the Kubernetes API. Because of the fact it will be deployed on a pod in k8s, it will have an access to the secrets w/ the CA certificate and baerer token representing the service account. So that RBAC can be controlled by Kubernetes itself. Our goal will be to list all the deployments in the cluster that have given label on them. This is a common pattern when working with operators, because it's a good practice to label the resources it creates.
+In other words the server-side rest endpoints will be transforming the incoming request to the request for the Kubernetes API. Because of the fact it will be deployed on a pod in k8s, it will have an access to the secrets with the CA certificate and baerer token representing the service account. So that RBAC can be controlled by Kubernetes itself. Our goal will be to list all the deployments in the cluster that have given label on them. This is a common pattern when working with operators, because it's a good practice to label the resources it creates.
 
 {{< figure src="/k8s-webapp-1/k8s-web-app.svg" >}}
 
@@ -27,7 +27,7 @@ In other words the server-side rest endpoints will be transforming the incoming 
 
 ### Generate the project
 
-We are lazy so we would like to write as little of code as possible. Let's scaffold an example Express.js application using [express-generator-typescript-k8s](https://github.com/jkremser/express-generator-typescript-k8s). It generates also swagger specs (OpenAPI 3) and contains also swagger ui out of the box. It also comes with the preinstalled JavaScript linter, Kubernetes client and TypeScript.
+We are lazy so we would like to write as little of code as possible. Let's scaffold an example Express.js application using [express-generator-typescript-k8s](https://github.com/jkremser/express-generator-typescript-k8s). It generates also the swagger specs (OpenAPI 3) and contains also swagger ui out of the box. It also comes with the preinstalled JavaScript linter, Kubernetes client, TypeScript and other goodies.
 
 Install the generator:
 ```bash
@@ -134,13 +134,13 @@ kind: Todo
 metadata:
   name: finish-this-blogpost
 spec:
-  text: "Enhance the content w/ more self-referential stuff."
+  text: "Enhance the content with more self-referential stuff."
   done: false
 CR
 
 $ kubectl get todos
-NAME                   TEXT                                                  DONE
-finish-this-blogpost   Enhance the content w/ more self-referential stuff.   false
+NAME                   TEXT                                                    DONE
+finish-this-blogpost   Enhance the content with more self-referential stuff.   false
 ```
 
 ### Add REST Endpoint
@@ -177,7 +177,7 @@ $ curl -s http://localhost:3000/api/todos/ | jq
     {
       "name": "finish-this-blogpost",
       "done": false,
-      "text": "Enhance the content w/ more self-referential stuff."
+      "text": "Enhance the content with more self-referential stuff."
     }
   ]
 }
@@ -185,4 +185,4 @@ $ curl -s http://localhost:3000/api/todos/ | jq
 \o/
 
 ## Conclusion
-We have a working REST endpoints that provides access to our custom resources in K8s cluster. This concludes the part 1.
+We have a working REST endpoints that provide access to our custom resources in K8s cluster. This concludes the part 1. Stay tuned for part 2.
