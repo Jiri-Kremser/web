@@ -13,6 +13,11 @@ git submodule update --init --recursive
 hugo server -D
 ```
 
+### Hugo
+```
+brew install hugo
+```
+
 ## Deploy
 ```bash
 hugo && cd public && git add -A && git commit -m "update" && git push origin master
