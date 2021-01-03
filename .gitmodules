@@ -2,6 +2,3 @@
 	path = public
 	url = git@github.com:jkremser/jkremser.github.io.git
 	branch = master
-[submodule "themes/minimal"]
-	path = themes/minimal
-	url = https://github.com/calintat/minimal.git
