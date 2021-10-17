@@ -1,6 +1,12 @@
 {{ partial "header" . }}
 
 <main>
+    <div style="position:absolute;height:100%; left:0%;">
+        <img src="tux.gif">
+    </div>
+    <div style="position:absolute;height:100%; left:50%;">
+        <img src="k8s.gif">
+    </div>
     <div class="intro">
         {{ with .Site.Params.profilePic }} <img class="profile" src="{{ . }}"> {{ end }}
         <h1>{{ .Site.Title }}</h1>

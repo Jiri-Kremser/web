@@ -105,4 +105,5 @@ a:hover {
 
 footer {
     border-bottom: var(--border-width) solid var(--accent);
+    z-index:10;
 }
