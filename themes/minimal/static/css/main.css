@@ -7,6 +7,7 @@ body {
     display: flex;
     text-align: center;
     flex-direction: column;
+    font-size: 19px;
 }
 
 main {
@@ -16,11 +17,21 @@ main {
     max-width: 750px;
 }
 
+.main img {
+    height: fit-content;
+}
+
 img {
     max-width: 100%;
 }
 
 /* Homepage */
+
+.name-intro {
+    font-family: 'Press Start 2P', sans-serif !important;
+    font-weight: 1000;
+    white-space: nowrap;
+}
 
 .intro {
     transform: translateY(22vh);
@@ -83,7 +94,7 @@ a:hover {
 /* List item for posts/projects */
 
 .item {
-    padding: 10px 0;
+    padding: 17px 0;
 }
 
 .item-tag {
@@ -103,7 +114,30 @@ a:hover {
     border-top: var(--border-width) solid var(--accent);
 }
 
+.navbar-nav {
+    font-family: "Kanit", "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 20px;
+}
+
+.navbar-nav:not(.navbar-right) a:hover {
+    padding-bottom: 5px;
+    border-bottom: 5px solid !important;
+}
+
 footer {
     border-bottom: var(--border-width) solid var(--accent);
     z-index:10;
+}
+.tux {
+    visibility: hidden;
+    position:absolute;
+    left:0%;
+    top: 30px;
+    height:100%;
+  }
+
+@media screen and (min-width: 1320px) {
+    .tux {
+      visibility: visible;
+    }
 }
