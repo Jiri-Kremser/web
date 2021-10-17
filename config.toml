@@ -41,7 +41,7 @@ googleAnalytics = "UA-141311316-1"
 
 [params]
     author = "Jirka Kremser"
-    description = "Full-stack software engineer working at ~~Red Hat~~, ~~Oracle~~ contractor and open source enthusiast."
+    description = "Full-stack software engineer working ~~at Red Hat~~, ~~Oracle~~, ~~as contractor~~ on k8gb.io and open source enthusiast."
     githubUsername = "jkremser"
     accent = "#1a574a"
     showBorder = true
