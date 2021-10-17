@@ -142,3 +142,15 @@ footer {
       visibility: visible;
     }
 }
+
+@media screen and (max-width: 480px) {
+    .intro > h1 {
+        font-size: 6vh;
+    }
+}
+
+@media screen and (max-width: 270px) {
+    .intro > h1 {
+        font-size: 4vh;
+    }
+}
