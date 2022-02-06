@@ -1,5 +1,6 @@
 # Resulting Website
 https://jkremser.github.io
+(& https://kremser.dev)
 
 ## Devel
 
@@ -22,3 +23,7 @@ brew install hugo
 ```bash
 hugo && cd public && git add -A && git commit -m "update" && git push origin master
 ```
+
+
+### Info
+So effectivelly this repo is an upstream (code) repository for [this repo](https://github.com/jkremser/jkremser.github.io) that contains the final bits. This repo has it as a git submodule.
