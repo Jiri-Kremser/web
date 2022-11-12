@@ -84,8 +84,8 @@ googleAnalytics = "UA-141311316-1"
     weight = 3
 
 [[menu.main]]
-    url = "/presentation/"
-    name = "Presentations"
+    url = "/talks/"
+    name = "Talks"
     weight = 4
 
 
