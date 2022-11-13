@@ -6,7 +6,7 @@
 
 # [params]
 #   author = "Jirka Kremser"
-#   description = "Full-stack software engineer working at Red Hat and open source enthusiast."
+#   description = "A guy working at Red Hat and open source enthusiast."
 
 # [[params.social]]
 #   name = "github"
@@ -41,7 +41,7 @@ googleAnalytics = "UA-141311316-1"
 
 [params]
     author = "Jirka Kremser"
-    description = "Full-stack software engineer working ~~at Red Hat~~, ~~Oracle~~, ~~as contractor~~ on k8gb.io and open source enthusiast."
+    description = "A guy working at ~~Red Hat~~, ~~Oracle~~, GiantSwarm.io and on k8gb.io."
     githubUsername = "jkremser"
     accent = "#1a574a"
     showBorder = true
