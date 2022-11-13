@@ -52,3 +52,8 @@ jobs:
             Code was changed in jkremser/web repo, hence opening the PR
             This automated PR was created by [this action][1].
             [1]: https://github.com/jkremser/web/actions/runs/${{ github.run_id }}
+
+      - name: Check PR
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}" | tee -a "$GITHUB_STEP_SUMMARY"
