@@ -1,0 +1,52 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.91.2'
+          # extended: true
+
+      - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # tag=v3.1.0
+        with:
+          repository: jkremser/jkremser.github.io
+          path: public
+          fetch-depth: 0
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@b4d51739f96fca8047ad065eccef63442d8e99f7 # tag=v4
+        with:
+          title: "Update webpage"
+          branch: web-update
+          path: public
+          commit-message: "orig msg: ${{ github.event.head_commit.message }}""
+          delete-branch: true
+          base: master
+          signoff: true
+          body: |
+            :package: web update :package:
+            ### automated change
+            Code was changed in jkremser/web repo, hence opening the PR
+            This automated PR was created by [this action][1].
+            [1]: https://github.com/jkremser/web/actions/runs/${{ github.run_id }}
