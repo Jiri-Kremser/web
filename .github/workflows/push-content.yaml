@@ -40,7 +40,7 @@ jobs:
           title: "Update webpage"
           branch: web-update
           path: public
-          commit-message: "orig msg: ${{ github.event.head_commit.message }}""
+          commit-message: "orig msg: ${{ github.event.head_commit.message }}"
           delete-branch: true
           base: master
           signoff: true

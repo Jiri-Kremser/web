@@ -2,28 +2,20 @@
 https://jkremser.github.io
 (& https://kremser.dev)
 
-## Devel
+### Prerequisites
+```
+brew install hugo
+```
 
-```
-# after cloning the repo
-git submodule add -f -b master git@github.com:jkremser/jkremser.github.io.git public
-git submodule update --init --recursive
-```
+## Dev
 
 ```bash
 hugo server -D
 ```
 
-### Hugo
-```
-brew install hugo
-```
-
 ## Deploy
-```bash
-hugo && cd public && git add -A && git commit -m "update" && git push origin master
-```
+Just push to this repo and the PR against [`jkremser/jkremser.github.io`](https://github.com/jkremser/jkremser.github.io) repo will be opened.
 
 
 ### Info
-So effectivelly this repo is an upstream (code) repository for [this repo](https://github.com/jkremser/jkremser.github.io) that contains the final bits. This repo has it as a git submodule.
+So effectivelly this repo is an upstream (code) repository for [this repo](https://github.com/jkremser/jkremser.github.io) that contains the final bits.
