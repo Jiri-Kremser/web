@@ -4,5 +4,6 @@ description: "I will show how you can leverage the containers and run the Spark 
 link: "https://www.openslava.sk/2017/#/sessions/5"
 tags: ["spark", "OpenSlava", "openshift", "kubernetes-operator"]
 weight: 50
+year: 2017
 draft: false
 ---

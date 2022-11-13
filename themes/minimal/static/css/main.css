@@ -96,10 +96,12 @@ a:hover {
 
 .item {
     padding: 17px 0;
+    margin-bottom: 25px;
 }
 
 .item-tag {
     background-color: var(--accent);
+    font-size: 70%;
 }
 
 /* Navigation icons */

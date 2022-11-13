@@ -4,5 +4,6 @@ description: "In this talk Jiri Kremser and Mike McCune will show a library for 
 link: "https://devconfus2019.sched.com/event/RFCk/polyglot-operators-spark-operator"
 tags: ["spark", "DevConf", "openshift", "kubernetes-operator"]
 weight: 8
+year: 2019
 draft: false
 ---

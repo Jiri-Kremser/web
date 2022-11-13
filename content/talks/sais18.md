@@ -4,5 +4,6 @@ description: "In this presentation I showed a simple way of leveraging Spark's G
 link: "https://databricks.com/speaker/jiri-kremser"
 tags: ["spark", "SAIS", "openshift", "bitcoin"]
 weight: 30
+year: 2018
 draft: false
 ---

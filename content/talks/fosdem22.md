@@ -8,5 +8,6 @@ In this sense this solution is unique, because it is using Kubernetes native too
 link: "https://fosdem.org/2022/schedule/event/container_k8gb_balancer/"
 tags: ["k8gb", "FOSDEM", "kubernetes-operator"]
 weight: 6
+year: 2022
 draft: false
 ---

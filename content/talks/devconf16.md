@@ -4,5 +4,6 @@ description: "The Reactive Extensions (Rx) is a tool for composing asynchronous 
 link: "https://www.youtube.com/watch?v=exX6f33DFpg"
 tags: ["RX", "DevConf", "programming", "patterns"]
 weight: 80
+year: 2016
 draft: false
 ---

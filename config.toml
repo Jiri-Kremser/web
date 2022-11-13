@@ -120,3 +120,8 @@ googleAnalytics = "UA-141311316-1"
     url = "mailto:jiri.kremser@gmail.com"
     name = "envelope-o"
     weight = 5
+
+[taxonomies]
+	tag = "tags"
+	category = "categories"
+	year = "year"

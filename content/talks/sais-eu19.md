@@ -4,5 +4,6 @@ description: "Have you ever wondered how to implement your own operator pattern 
 link: "https://databricks.com/session_eu19/spark-operator-deploy-manage-and-monitor-spark-clusters-on-kubernetes"
 tags: ["spark", "SAIS", "openshift", "kubernetes-operator"]
 weight: 9
+year: 2019
 draft: false
 ---

@@ -6,5 +6,6 @@ Scala noob? No worries! No previous Scala experience is needed, all the techniqu
 link: "https://www.youtube.com/watch?v=exX6f33DFpg"
 tags: ["scala", "DevConf", "DSL", "programming"]
 weight: 90
+year: 2014
 draft: false
 ---

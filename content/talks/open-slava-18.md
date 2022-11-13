@@ -4,5 +4,6 @@ description: "Have you ever wondered how to implement your own operator pattern 
 link: "https://www.openslava.sk/2018/#/program/ee9682f2-af51-49f5-9fde-99ca4c1e2ce6"
 tags: ["spark", "OpenSlava", "openshift", "notebook"]
 weight: 60
+year: 2018
 draft: false
 ---
