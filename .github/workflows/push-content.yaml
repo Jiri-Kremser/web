@@ -41,6 +41,7 @@ jobs:
           title: "Update webpage"
           branch: web-update
           path: public
+          token: ${{ secrets.WEB_GITHUB_TOKEN }}
           commit-message: "orig msg: ${{ github.event.head_commit.message }}"
           delete-branch: true
           base: master
