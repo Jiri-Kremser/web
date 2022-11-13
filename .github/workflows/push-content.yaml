@@ -37,6 +37,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@b4d51739f96fca8047ad065eccef63442d8e99f7 # tag=v4
+        id: cpr
         with:
           title: "Update webpage"
           branch: web-update
