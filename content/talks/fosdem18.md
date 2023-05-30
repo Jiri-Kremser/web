@@ -7,7 +7,7 @@ The talk will briefly describe how Blockchain transactions work, but most of the
 Intended audience: intermediate, analysts, Bitcoin/Altcoin enthusiasts"
 link: "https://archive.fosdem.org/2018/schedule/speaker/jiri_kremser/"
 tags: ["spark", "FOSDEM", "openshift", "bitcoin"]
-weight: 11
+weight: 110
 draft: false
 year: 2018
 ---

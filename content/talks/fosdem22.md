@@ -7,7 +7,7 @@ k8gb is an open-source Kubernetes operator that is deployed in each participatin
 In this sense this solution is unique, because it is using Kubernetes native tools with customisable probes and battle tested DNS protocol instead of HTTP pings or other similar approaches where single point of failure might be a problem. In k8gb architecture all k8s clusters are equal and there is no SPoF except the common edge DNS server."
 link: "https://fosdem.org/2022/schedule/event/container_k8gb_balancer/"
 tags: ["k8gb", "FOSDEM", "kubernetes-operator"]
-weight: 6
+weight: 60
 year: 2022
 draft: false
 ---
