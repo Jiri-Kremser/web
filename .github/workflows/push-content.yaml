@@ -51,8 +51,7 @@ jobs:
             :package: web update :package:
             ### automated change
             Code was changed in jkremser/web repo, hence opening the PR
-            This automated PR was created by [this action][1].
-            [1]: https://github.com/jkremser/web/actions/runs/${{ github.run_id }}
+            This automated PR was created by [this action](https://github.com/jkremser/web/actions/runs/${{ github.run_id }}).
 
       - name: Check PR
         run: |
