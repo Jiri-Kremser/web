@@ -203,4 +203,4 @@ I thing the following two images conclude nicely the IPAM in CAPI.
 
 ---
 
-Where `devex fairy` is the CAIP controller and `security gandalf` is Kyverno.
+Where `devex fairy` is the CAIP & CAPI controllers and `security gandalf` is Kyverno.
