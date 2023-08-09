@@ -38,6 +38,7 @@ As we mentioned before, we don't have the full support for cloud provider here s
 We have considered using `MetalLB` and `Cilium` but both of them required to configure BGP properly (ASN numbers) so for the sake of simplicity we choose to use simple [`kube-vip`](https://kube-vip.io/) project with ARP advertisment. That means that we currently deploy kube-vip in two different flavors:
 
 a) used for control-plane HA (static pod on each control plane node)
+
 b) used as a service LB (deployed as `DaemonSet`)
 
 Part of the LB solution is also a kubevip's [controller controller manager](https://github.com/kube-vip/kube-vip-cloud-provider). This component is also specific to on-prem and its goal is to assign an new free IP from given a CIDR. It watches to all changes to a `Service` resource of type `LoadBalancer` and if the IP is not set, it assign a new one. Then it is up to kube-vip LB to create a new virtual interface on the given node and advertise this new IP in the network usith the layer 2 ARP protocol.
