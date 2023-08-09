@@ -41,7 +41,7 @@ a) used for control-plane HA (static pod on each control plane node)
 
 b) used as a service LB (deployed as `DaemonSet`)
 
-Part of the LB solution is also a kubevip's [controller controller manager](https://github.com/kube-vip/kube-vip-cloud-provider). This component is also specific to on-prem and its goal is to assign an new free IP from given a CIDR. It watches to all changes to a `Service` resource of type `LoadBalancer` and if the IP is not set, it assign a new one. Then it is up to kube-vip LB to create a new virtual interface on the given node and advertise this new IP in the network usith the layer 2 ARP protocol.
+Part of the LB solution is also a kubevip's [controller controller manager](https://github.com/kube-vip/kube-vip-cloud-provider). This component is also specific to on-prem and its goal is to assigns a new free IP from given a CIDR. It watches for all changes to a `Service` resource of type `LoadBalancer` and if the IP is not set, it assign a new one. Then it is up to kube-vip LB to create a new virtual interface on the given node and advertise this new IP in the network usith the layer 2 ARP protocol.
 
 The range of IPs for service LB is defined as a configmap:
 
