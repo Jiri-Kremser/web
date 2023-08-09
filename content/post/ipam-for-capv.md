@@ -23,7 +23,10 @@ Each infrastructure provider is different and provides different level of comfor
 
 Also when creating a new cluster, at least the IP for control plane needs to be known in advance (capv). The reason for this is that capv uses kube-vip by default to enable the control planes to run in HA mode. Kubevip then selects one of the control-planes as the primary one and creates a virtual IP for it. The failover is then solved by leader election mechanism by using kubernetes [primitives](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/lease-v1/). When we create a new WC, we need a new free IP for it.
 
+{{% notice note %}}
 That's the problem that can be solved by IP address management (IPAM).
+{{% /notice %}}
+
 
 ### Architecture
 
@@ -81,16 +84,16 @@ podinfo-external   LoadBalancer   172.31.119.240   10.10.222.244   80:32062/TCP 
 
 `\o/`
 
-## Part 2 - IPAM
+## Part 2 - IPAM for Workload Clusters (api server)
 
-This is a orthogonal problem to the previous one, but it also includes IPAM. When creating a new cluster using Cluster API, one has to create a whole bunch of kubernetes resources. There are tutorials, docs and presentations about CAPI, so we are not going to describe it in the detail, but rather from a high perspective. These resources form a tree and are cross-linked by references in their `.spec`s. CAPI consist of four controllers and each of them react on various CRs from that tree of yamls. Luckily the overall reconcilliation of a new cluster can be paused by setting such flag on the top-lvl CR - Cluster. We will use that later on.
+This is an orthogonal problem to the previous one, but it also includes IPAM. When creating a new cluster using Cluster API, one has to create a whole bunch of kubernetes resources. There are tutorials, docs and presentations about CAPI, so we are not going to describe it in the detail, but rather from a high perspective. These resources form a tree and are cross-linked by references in their `.spec`s. CAPI consist of four controllers and each of them react on various CRs from that tree of yamls. Luckily the overall reconcilliation of a new cluster can be paused by setting such flag on the top-lvl CR - Cluster. We will use that later on.
 
 What we are going to need is a controller/operator that keeps tracks of used IP adresses and can allocate new ones, ideally in kubernetes native way. CAPI itself
 introduces following CRDs:
 - `IPAddress`
 - `IPAddressClaim`
 
-And the idea is that one can create an `IPAddressClaim` CR with a reference to a "pool" and someone should create an new `IPAddress` with the same name as the claim satisfying the IP adress range definition from the pool. One implementor of this contract is the [cluster-api-ipam-provider-in-cluster](https://github.com/kubernetes-sigs/cluster-api-ipam-provider-in-cluster) that we ended up using.
+And the idea is that one can create an `IPAddressClaim` CR with a reference to a "pool" and someone should create a new `IPAddress` with the same name as the claim satisfying the IP adress range definition from the pool. One implementor of this contract is the [cluster-api-ipam-provider-in-cluster](https://github.com/kubernetes-sigs/cluster-api-ipam-provider-in-cluster) that we ended up using.
 
 Example:
 
@@ -140,23 +143,25 @@ DESCRIPTION:
     typed referenced object inside the same namespace.
 ```
 
-It means that each VM created from given template will have an IP address managed using the `IPAddress` and `IPAddressClaim`. That's both over-kill and also not sufficient. It's overkill, because we don't need to take those non-important VMs (like worker nodes, or other control planes (CP) when running in HA) those precious IPs, we care only about one virtual api for all control planes running in HA mode as described in kube-vip (control plane HA use-case).
+It means that each VM created from a given template will have an IP address managed using the `IPAddress` and `IPAddressClaim`. That's both over-kill and also not sufficient. It's overkill, because we don't need to take those non-important VMs (like worker nodes, or other control planes (CP) when running in HA) those precious IPs, we care only about one virtual api for all control planes running in HA mode as described in kube-vip (control plane HA use-case).
 
-Also it is not sufficient, because it can't propagate that IP into other resources in that tree of objects where the information is needed:
+Also it is not sufficient, because it can't propagate that IP into other resources in that tree of CAPI objects where the information is needed:
+{{% notice foobar propagate %}}
 - `.spec.controlPlaneEndpoint.host` in `VsphereCluster` CR
 - static pod definition for kubevip in `KubeadmControlPlane` (file with static pod is mounted to each CP node)
 - `.spec.kubeadmConfigSpec.clusterConfiguration.apiServer.certSANs` same `KubeadmControlPlane` CR as the previous one
+{{% /notice %}}
 
 ### Our Solution
 
-So given we have installed the `cluster-api-ipam-provider-in-cluster` (`CAIP` - not to be confused with `CAPI` ;) we can now first create the `IPAddressClaim`, and only if it succeeds, only then use that IP in those places described above and create the set of resources for CAPI.
+So given we have installed the `cluster-api-ipam-provider-in-cluster` (`CAIP` - not to be confused with `CAPI` ;) we can now first create the `IPAddressClaim`, and only if it succeeds, only then use that IP in those places described [above](./#propagate) and create the set of resources for CAPI.
 
 However, our resources for `VsphereCluster` are delivered as a Helm Chart so we can actually:
 
 1) deploy everything at once, all the CAPI resource, but also the `IPAddressClaim`
 2) create a pre-install job that will paused the `Cluster` CR so that controllers will ignore it for a moment
 3) create a post-install job in helm that will be waiting for the `IPAddress` to exist
-4) once the IP is obtained, it will propagate (`kubectl patch`) the IP to those three abovementioned places
+4) once the IP is obtained, it will propagate (`kubectl patch`) the IP to those three [abovementioned](./#propagate) places
 5) unpause the `Cluster` CR
 
 ---
@@ -169,7 +174,7 @@ All this jazz is happening in our implementation only if the cluster is created 
 
 `\o/`
 
-## Part 3 - Kyverno policy
+## Part 3 - Kyverno Policy
 
 Another approach to IPAM for WCs problem would be using Kyverno and their ability to create validating and mutating webhooks much more easily. Originally, 
 I wanted to introduce a mutating webhook that would intercept the creation of the Cluster resrouce w/o any IP in it and assign this IP here.
