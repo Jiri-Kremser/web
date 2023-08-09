@@ -47,12 +47,38 @@ The range of IPs for service LB is defined as a configmap:
 ```bash
 λ k get cm kubevip -n kube-system -o jsonpath={.data} | jq
 {
-  "cidr-global": "10.10.222.231/32"
+  "cidr-global": "10.10.222.244/30"
 }
 ```
 
 It also supports a per-namespace ranges, but we don't use it.
 
+If configured and deployed properly, it works like this:
+
+```bash
+# deploy an example app
+λ helm upgrade -i frontend --set ui.message="I am example app" podinfo/podinfo --version 5.1.1
+```
+
+```bash
+# the --type=LoadBalancer is important here, it will create a service with this type
+λ k expose service frontend-podinfo --port=80 --target-port=9898 --type=LoadBalancer --name podinfo-external
+```
+
+```bash
+λ k get svc podinfo-external
+podinfo-external   LoadBalancer   172.31.119.240   <pending>     80:32062/TCP        1s
+```
+
+```bash
+λ k get svc podinfo-external
+podinfo-external   LoadBalancer   172.31.119.240   10.10.222.244   80:32062/TCP        5s
+
+λ curl -s 10.10.222.244 | grep message
+  "message": "I am example app",
+```
+
+`\o/`
 
 ## Part 2 - IPAM
 
@@ -139,6 +165,8 @@ code: https://github.com/giantswarm/cluster-vsphere/blob/main/helm/cluster-vsphe
 ---
 
 All this jazz is happening in our implementation only if the cluster is created w/o any IP address in the `.spec.controlPlaneEndpoint.host` field. If the IP is specified, it will use the given/static one. Advantage of this approach is that `IPAddressClaim` is also part of the helm chart so if the helm chart got uninstalled, the claim is also deleted and the IP can be reused later on by another WC. Also all the IPAM can be easily managed at one place in the MC using the CRDs.
+
+`\o/`
 
 ## Part 3 - Kyverno policy
 
