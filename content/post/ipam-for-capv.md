@@ -10,10 +10,10 @@ draft: false
 # Motivation
 
 Cluster API (CAPI) provides uniform workflow for deploying and operating Kubernetes clusters. It aims to abstract its user from the infrastructure level.
-The infrastructure in the form of VMs can be provided by a cloud provider like AWS or Azure. However these platform often supports also managed kubernetes experience (EKS, AKS), where a lot of features like load balancing, managed control planes are just there.
+The infrastructure in the form of VMs can be provided by a cloud provider like AWS or Azure. However these platform often support also managed kubernetes experience (EKS, AKS), where a lot of features like load balancing, managed control planes are just there.
 
 In this blog post we will be looking into a situation where basically no advanced features are provided and all we have is a virtualization platform like `vSphere`. 
-In this case we are on our own and we need to manage the load balancing and IP management on our own. All the article is tackeling only the IPv4, but it could be generalized also to IPv6 stack.
+In this case we are on our own and we need to manage the load balancing and IP management on our own. All the article is tackling only the IPv4, but it could be generalized also to IPv6 stack.
 
 ## Problem Landscape
 
@@ -27,9 +27,9 @@ That's the problem that can be solved by IP address management (IPAM).
 
 ### Architecture
 
-For better visualisation of the problem, check the following diagram of our overall platform.
+For better visualisation of the problem, check the following diagram of our overall platform. The important part is the dedicated management cluster (MC) and CAPI controllers (the turtles) that can talk to vSphere and can create 1 to n Workload clusters (WCs), the rest is off-topic.
 
-{{< figure src="/ipam-for-capv/platform.png" >}}
+{{< figure src="/ipam-for-capv/platform-t.png" >}}
 
 ## Part 1 - Service Load Balancer
 
@@ -120,11 +120,87 @@ Also it is not sufficient, because it can't propagate that IP into other resourc
 - static pod definition for kubevip in `KubeadmControlPlane` (file with static pod is mounted to each CP node)
 - `.spec.kubeadmConfigSpec.clusterConfiguration.apiServer.certSANs` same `KubeadmControlPlane` CR as the previous one
 
-todo
+### Our Solution
+
+So given we have installed the `cluster-api-ipam-provider-in-cluster` (`CAIP` - not to be confused with `CAPI` ;) we can now first create the `IPAddressClaim`, and only if it succeeds, only then use that IP in those places described above and create the set of resources for CAPI.
+
+However, our resources for `VsphereCluster` are delivered as a Helm Chart so we can actually:
+
+1) deploy everything at once, all the CAPI resource, but also the `IPAddressClaim`
+2) create a pre-install job that will paused the `Cluster` CR so that controllers will ignore it for a moment
+3) create a post-install job in helm that will be waiting for the `IPAddress` to exist
+4) once the IP is obtained, it will propagate (`kubectl patch`) the IP to those three abovementioned places
+5) unpause the `Cluster` CR
+
+---
+
+code: https://github.com/giantswarm/cluster-vsphere/blob/main/helm/cluster-vsphere/templates/ipam/assign-ip-pre-install-job.yaml
+
+---
+
+All this jazz is happening in our implementation only if the cluster is created w/o any IP address in the `.spec.controlPlaneEndpoint.host` field. If the IP is specified, it will use the given/static one. Advantage of this approach is that `IPAddressClaim` is also part of the helm chart so if the helm chart got uninstalled, the claim is also deleted and the IP can be reused later on by another WC. Also all the IPAM can be easily managed at one place in the MC using the CRDs.
 
 ## Part 3 - Kyverno policy
-todo
+
+Another approach to IPAM for WCs problem would be using Kyverno and their ability to create validating and mutating webhooks much more easily. Originally, 
+I wanted to introduce a mutating webhook that would intercept the creation of the Cluster resrouce w/o any IP in it and assign this IP here.
+
+Problem with this approach is that Kyverno's internal language (JMESPath) is not powerful enough for this. It can't expand CIDR ranges or keep track of how many IPs were taken, fill the holes, etc.
+
+On the other hand the validating webhook would be percectly doable here with little help of helm-chart-fu again.
+
+---
+
+Kyverno can check for instance if certain field of a validated resource is contained in the set. So if we pre-populate the set with allowed values, the check itself is pretty easy:
+
+```yaml
+        ...
+        deny:
+          conditions:
+            all:
+            - key: [[`"[[ request.object.spec.controlPlaneEndpoint.host ]]"`]]
+              operator: NotIn
+              value: [[`"[[ allowedIps ]]"`]]
+```
+
+`allowedIps` here are read from the ConfigMap:
+
+```yaml
+        ...
+        - name: allowedIps
+          variable:
+            value: [[`"[[ wcAllowedIpsCm.data.\"allowed-ips\" | parse_yaml(@) ]]"`]]
+```
+[full code](https://github.com/giantswarm/kyverno-policies-connectivity/blob/main/helm/kyverno-policies-connectivity/templates/wc-ip/WorkloadClusterIp.yaml)
+
+And finally this configmap is pre-populated by pre-install helm job with little bit of old bash in it: [full code](https://github.com/giantswarm/kyverno-policies-connectivity/blob/main/helm/kyverno-policies-connectivity/templates/wc-ip/WorkloadClusterIpJob.yaml).
+
+So if this Kyverno `ClusterPolicy` is active, it doesn't allow anybody to create or change the `.spec.controlPlaneEndpoint.host` field of `VsphereCluster` (but it can work with any Infra cluster CR) to an IP that's not comming from a given IP range.
+
+In theory the Kyverno could also use the CAIP controller and introduce a [Generate rule](https://kyverno.io/docs/writing-policies/generate/) that would be creating those `IpAddressClaims` but that sounds like a lot of magic to me and those claims would stayed there even if the cluster was uninstalled (the IP would not be freed).
+
 
 ## Conclusion
-todo
 
+In on-prem (or even bare metal) environments we are often on our own with CAPI and in this blog post we have described our way to do-it-yourself IPAM solution. It provides a way to simply check available addresses using the kubectl. kube-vip is a very well described open-source project and do its job as promised. We use it for
+two different use-cases (LB for services and HA for CPs).
+
+And last but not least, Kyverno can guard what IPs are actually used in the Cluster resource and intercept disaster scenarios where one can assign an existing IP to a cluster. It will hapilly provision the VMs, but then the api-server will be failing half of the requests, because there are two VMs with the same static IP.
+
+---
+
+I thing the following two images conclude nicely the IPAM in CAPI.
+
+### What users want to happen:
+
+{{< figure src="/ipam-for-capv/cluster.png" >}}
+
+---
+
+### What actually happens:
+
+{{< figure src="/ipam-for-capv/complex.png" >}}
+
+---
+
+Where `devex fairy` is the CAIP controller and `security gandalf` is Kyverno.
