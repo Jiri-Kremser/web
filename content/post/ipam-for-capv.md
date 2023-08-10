@@ -181,29 +181,37 @@ I wanted to introduce a mutating webhook that would intercept the creation of th
 
 Problem with this approach is that Kyverno's internal language (JMESPath) is not powerful enough for this. It can't expand CIDR ranges or keep track of how many IPs were taken, fill the holes, etc.
 
-On the other hand the validating webhook would be percectly doable here with little help of helm-chart-fu again.
+On the other hand the validating webhook would be perfectly doable here with little help of helm-chart-fu again.
 
 ---
 
 Kyverno can check for instance if certain field of a validated resource is contained in the set. So if we pre-populate the set with allowed values, the check itself is pretty easy:
 
 ```yaml
-        ...
+      ...
+      validate:
         deny:
           conditions:
             all:
-            - key: [[`"[[ request.object.spec.controlPlaneEndpoint.host ]]"`]]
+            - key: {{`"{{ request.object.spec.controlPlaneEndpoint.host }}"`}}
               operator: NotIn
-              value: [[`"[[ allowedIps ]]"`]]
+              value: {{`"{{ allowedIps }}"`}}
+      ...
 ```
 
 `allowedIps` here are read from the ConfigMap:
 
 ```yaml
-        ...
+      ...
+      context:
+        - name: wcAllowedIpsCm
+          configMap:
+            name: {{ .Release.Name }}-wc-allowed-ips
+            namespace: "{{ $.Release.Namespace }}"
         - name: allowedIps
           variable:
-            value: [[`"[[ wcAllowedIpsCm.data.\"allowed-ips\" | parse_yaml(@) ]]"`]]
+            value: {{`"{{ wcAllowedIpsCm.data.\"allowed-ips\" | parse_yaml(@) }}"`}}
+      ...
 ```
 [full code](https://github.com/giantswarm/kyverno-policies-connectivity/blob/main/helm/kyverno-policies-connectivity/templates/wc-ip/WorkloadClusterIp.yaml)
 
