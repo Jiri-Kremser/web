@@ -231,7 +231,7 @@ And last but not least, Kyverno can guard what IPs are actually used in the Clus
 
 ---
 
-I thing the following two images conclude nicely the IPAM in CAPI.
+I think the following two images conclude nicely the IPAM in CAPI.
 
 ### What users want to happen:
 
