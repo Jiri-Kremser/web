@@ -141,10 +141,10 @@ images: https://quay.io/repository/radanalyticsio/spark-operator?tab=tags
 What we have sacrificed here with using the AOT compilation is the best possible peak performance, in other words the optimized assembly code directly tailored for the profile of our long running app, however the benefits clearly overweight this issue. Operators aren't supposed to do difficult parallel calculation, on the other hand they should start quickly, be small, reliable and have small memory footprint. And that we have achieved.
 
 #### Links
-* <i class="fa fa-github"></i> Spark Operator -- [radanalyticsio/spark-operator](https://github.com/radanalyticsio/spark-operator)
-* <i class="fa fa-github"></i> Abstract Operator -- [jvm-operators/abstract-operator](https://github.com/jvm-operators/abstract-operator)
-* <i class="fa fa-github"></i> GraalVM -- [oracle/graal](https://github.com/oracle/graal)
-* <i class="fa fa-github"></i> Quarkus -- [quarkusio/quarkus](https://github.com/quarkusio/quarkus)
-* <i class="fa fa-github"></i> Kubernetes Client -- [fabric8io/kubernetes-client](https://github.com/fabric8io/kubernetes-client)
-* <i class="fa fa-github"></i> kubernetes-client Quarkus Extension -- [repo](https://github.com/quarkusio/quarkus/tree/master/extensions/kubernetes-client)
-* <i class="fa fa-github"></i> jsonschema2pojo -- [joelittlejohn/jsonschema2pojo](https://github.com/joelittlejohn/jsonschema2pojo)
+* {{% fa github %}} Spark Operator -- [radanalyticsio/spark-operator](https://github.com/radanalyticsio/spark-operator)
+* {{% fa github %}} Abstract Operator -- [jvm-operators/abstract-operator](https://github.com/jvm-operators/abstract-operator)
+* {{% fa github %}} GraalVM -- [oracle/graal](https://github.com/oracle/graal)
+* {{% fa github %}} Quarkus -- [quarkusio/quarkus](https://github.com/quarkusio/quarkus)
+* {{% fa github %}} Kubernetes Client -- [fabric8io/kubernetes-client](https://github.com/fabric8io/kubernetes-client)
+* {{% fa github %}} kubernetes-client Quarkus Extension -- [repo](https://github.com/quarkusio/quarkus/tree/master/extensions/kubernetes-client)
+* {{% fa github %}} jsonschema2pojo -- [joelittlejohn/jsonschema2pojo](https://github.com/joelittlejohn/jsonschema2pojo)
