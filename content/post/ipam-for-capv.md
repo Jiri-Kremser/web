@@ -233,7 +233,7 @@ And last but not least, Kyverno can guard what IPs are actually used in the Clus
 ### Implications
 
 With this DIY solution, customer (platform developer) does not have to pay for more advanced solutions like `NSX Advanced Load Balancer` in case of `vSphere` ecosystem and at the same time, has the full control over the infrastructure. Nonetheless, with great power comes great responsibility 🕷
-
+  
 ---
 {{% vertical-space 100 %}}
 I think the following two images conclude nicely the IPAM in CAPI.
