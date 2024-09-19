@@ -17,10 +17,16 @@
     {{ with .Description }} {{ $.Scratch.Set "subheader" . }} {{ end }}
 
     <h4><a href="{{ .Scratch.Get "link" }}">{{ .Title }}</a></h4>
+    {{ if .Params.where }} <p> at <b>{{.Params.where}}</b></p> {{ end }}
     <!-- {{ with .Params.year }}
     <h5>year: {{ . }}</h5>
     {{end}} -->
     <h5>{{ $.Scratch.Get "subheader" }}</h5>
+    {{ if or .Params.recording .Params.slides }}<p><h5>( {{ end }}
+    {{ if .Params.recording }}<a href="{{.Params.recording}}">recording</a>{{ end }}
+    {{ if and .Params.recording .Params.slides }}, {{ end }}
+    {{ if .Params.slides }}<a href="{{.Params.slides}}">slides</a> {{ end }}
+    {{ if or .Params.recording .Params.slides }})</p></h5>{{ end }}
     {{ partial "tags" . }}
 
 </div>
